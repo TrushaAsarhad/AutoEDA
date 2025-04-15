@@ -79,8 +79,11 @@ def handle_missing_values(df, col, method, value=None):
 
 def plot_distribution(df, column):
     fig, ax = plt.subplots()
-    sns.histplot(df[column].dropna(), kde=True, ax=ax)
-    st.pyplot(fig)
+    if column in df.columns:
+        sns.histplot(df[column].dropna(), kde=True, ax=ax)
+        st.pyplot(fig)
+    else:
+        st.warning(f"Column '{column}' is no longer in the dataset.")
 
 def show_correlation(df):
     corr = df.corr(numeric_only=True)
@@ -141,8 +144,11 @@ if st.session_state.df is not None:
 
     st.write("### Distribution of Variables")
     num_cols = df.select_dtypes(include=np.number).columns.tolist()
-    col = st.selectbox("Select column to plot histogram", num_cols)
-    plot_distribution(df, col)
+    if num_cols:  # Ensure there are numeric columns
+        col = st.selectbox("Select column to plot histogram", num_cols)
+        plot_distribution(df, col)
+    else:
+        st.warning("No numeric columns available for plotting.")
 
     st.subheader("📊 Correlation & Pairplot")
     if st.checkbox("Show Correlation Heatmap"):
