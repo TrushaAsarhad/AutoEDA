@@ -8,3 +8,5 @@ streamlit-pandas-profiling
 sweetviz
 openpyxl
 scikit-learn
+setuptools
+
